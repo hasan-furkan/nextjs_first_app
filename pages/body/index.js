@@ -1,34 +1,77 @@
-import Head from 'next/head';
-import { useState } from 'react';
-function Header({ title }) {
-  return (
-      <Head>
-          <title>{title ? title : "Title calisiyor"}</title>
-      </Head>
-  );
-}
 
-export default function HomePage() {
-  const names = ['Ada Lovelace', 'Grace Hopper', 'Margaret Hamilton'];
+import { useState } from "react"
+import styles from "../../styles/button.module.css";
 
-  const [likes, setLikes] = useState(0);
+export default function HomePage(){
 
-  function handleClick() { 
-    setLikes(likes + 1);
+
+  const [myList, setMyList] = useState([]);
+
+  const [text, setText] = useState("");
+
+  
+  
+  const handleCHangeText = (e) => {
+    e.preventDefault()
+    setText(e.target.value);
+  }
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setMyList([...myList, text]);
+    setText("");
   }
 
-  return (
-    <div>
-      <Header title="Develop. Preview. Ship. 🚀" />
-      <ul>
-        {names.map((name) => (
-          <li key={name}>{name}</li>
-        ))}
-      </ul>
+  const handleRemove = (item) => {
+      const updateList = myList.filter(myItem => myList.indexOf(myItem) !== myList.indexOf(item))
 
-      <button onClick={handleClick}>Like ({likes})</button>
+    setMyList(updateList)}
+
+  return(
+    <>
+    
+    <div className={styles.container}>
+     
+      <input type="text" 
+      value={text}
+      onChange={handleCHangeText}
+      />
+      
+      <button
+      className={styles.button}
+      onClick={handleSubmit}>Kaydet</button>
+
+    <ul>
+      {myList.map((item, index) => {
+        return <li key={index}>{item}<button className="button"
+        onClick={(e)=>
+        {
+          e.preventDefault()
+        handleRemove(item)
+        }
+        }
+        >Delete</button></li>
+        
+      })}
+    </ul>
+
+    
     </div>
-  );
+    
+    <style jsx>
+
+    {
+      `
+      .button {
+        background-color: #4CAF50;
+      }
+      `
+    }
+
+    </style>
+    </>
+
+    
+
+  )
 }
-
-
